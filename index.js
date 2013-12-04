@@ -7,7 +7,7 @@ exports.register = function (plugin, options, next) {
     if (err) return next(err);
     plugin.expose('db', db);
     plugin.expose('lib', mongodb);
-    plugin.expose('objectId', ObjectID);
+    plugin.expose('ObjectID', ObjectID);
     next();
   });
 }
