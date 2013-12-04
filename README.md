@@ -13,7 +13,7 @@ Several objects are exposed by this plugin :
 
 - `db` : connection object to the database
 - `lib` : mongodb library in case you need to use it
-- `objectId` : mongodb objectId method in can you need to use it
+- `ObjectID` : mongodb objectId method in can you need to use it
 
 Usage example :
 ```js
@@ -49,7 +49,7 @@ function usersHandler ( request ) {
 
 
 	var db = this.server.plugins['hapi-mongodb'].db;
-	var ObjectID = this.server.plugins['hapi-mongodb'].objectId;
+	var ObjectID = this.server.plugins['hapi-mongodb'].ObjectID;
 
 	db.collection('users').findOne({  "_id" : new ObjectID( request.params.id) }, function(err, result) {
 
