@@ -16,6 +16,7 @@ describe('Hapi server', function() {
     this.server.route({ method: 'GET', path: '/', handler: function() {
       assert(this.server.plugins['hapi-mongodb'].db, 'Could not find db object');
       assert(this.server.plugins['hapi-mongodb'].lib, 'Could not find mongodb library');
+      assert(this.server.plugins['hapi-mongodb'].objectId, 'Could not find mongodb objectId');
       done();
     }});
     this.server.inject({ method: 'GET', url: '/' }, function() {});
