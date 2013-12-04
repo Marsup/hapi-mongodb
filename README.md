@@ -16,13 +16,53 @@ Several objects are exposed by this plugin :
 
 Usage example :
 ```js
-function handler(request) {
-  var db = this.server.plugins['hapi-mongodb'].db;
-  db.collection('store').findOne({ id: request.query.id }, function(err, result) {
-    if (err) return request.reply(Hapi.error.internal('Internal MongoDB error', err));
-    request.reply(result);
-  });
-}
+var Hapi = require("hapi");
+
+var dbOpts = {
+	"url"		: "mongodb://localhost:27017/test",
+	"options"	: {
+		"db"	: {
+	    	"native_parser": false
+	    }
+	}
+};
+
+var server = new Hapi.Server(8080);
+
+server.pack.require('hapi-mongodb', dbOpts, function (err) {
+
+    if (err) {
+        console.error(err);
+        throw err;
+    }
+
+});
+
+server.route( {
+	"method"	: "GET",
+	"path"		: "/users/{id}",
+	"handler"	: usersHandler
+});
+
+function usersHandler ( request ) {
+
+
+	var db = this.server.plugins['hapi-mongodb'].db;
+	var ObjectID = this.server.plugins['hapi-mongodb'].objectId;
+
+	db.collection('users').findOne({  "_id" : new ObjectID( request.params.id) }, function(err, result) {
+
+		if (err) return request.reply(Hapi.error.internal('Internal MongoDB error', err));
+
+		request.reply(result);
+
+	});
+
+};
+
+server.start( function() {
+	console.log("Server started at " + server.info.uri);
+});
 ```
 
 Huge thanks to [@dypsilon](https://github.com/dypsilon) for his help into the making of this plugin.
