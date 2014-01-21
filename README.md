@@ -2,8 +2,6 @@
 
 This is a plugin to share a common MongoDB connection pool across the whole Hapi server.
 
-The versioning of this lib shares the major/minor versions of the mongodb library.
-
 It takes 2 options :
 
 - url: MongoDB connection string (eg. `mongodb://user:pass@localhost:27017`),

@@ -13,12 +13,13 @@ describe('Hapi server', function() {
     }, done);
   });
   it('should be able to find the plugin exposed objects', function(done) {
-    this.server.route({ method: 'GET', path: '/', handler: function() {
-      assert(this.server.plugins['hapi-mongodb'].db, 'Could not find db object');
-      assert(this.server.plugins['hapi-mongodb'].lib, 'Could not find mongodb library');
-      assert(this.server.plugins['hapi-mongodb'].ObjectID, 'Could not find mongodb ObjectID');
+    var server = this.server;
+    server.route({ method: 'GET', path: '/', handler: function() {
+      assert(server.plugins['hapi-mongodb'].db, 'Could not find db object');
+      assert(server.plugins['hapi-mongodb'].lib, 'Could not find mongodb library');
+      assert(server.plugins['hapi-mongodb'].ObjectID, 'Could not find mongodb ObjectID');
       done();
     }});
-    this.server.inject({ method: 'GET', url: '/' }, function() {});
+    server.inject({ method: 'GET', url: '/' }, function() {});
   });
 });
