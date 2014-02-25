@@ -41,13 +41,13 @@ server.route( {
     "handler" : usersHandler
 });
 
-function usersHandler(request) {
-    var db = this.server.plugins['hapi-mongodb'].db;
-    var ObjectID = this.server.plugins['hapi-mongodb'].ObjectID;
+function usersHandler(request, reply) {
+    var db = request.server.plugins['hapi-mongodb'].db;
+    var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
 
     db.collection('users').findOne({  "_id" : new ObjectID(request.params.id) }, function(err, result) {
-        if (err) return request.reply(Hapi.error.internal('Internal MongoDB error', err));
-        request.reply(result);
+        if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
+        reply(result);
     });
 };
 
