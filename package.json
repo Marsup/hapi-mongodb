@@ -20,6 +20,7 @@
     "url": "https://github.com/Marsup/hapi-mongodb/issues"
   },
   "dependencies": {
+    "hoek": "^2.3.0",
     "mongodb": "1.x"
   },
   "devDependencies": {
