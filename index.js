@@ -15,11 +15,16 @@ exports.register = function (plugin, options, next) {
   options = Hoek.applyToDefaults(defaults, options);
 
   MongoClient.connect(options.url, options, function (err, db) {
-    if (err) return next(err);
+    if (err) {
+      plugin.log([ "hapi-mongodb", "error" ], err);
+      return next(err)
+    }
 
     plugin.expose('db', db);
     plugin.expose('lib', mongodb);
     plugin.expose('ObjectID', ObjectID);
+
+    plugin.log([ "hapi-mongodb", "info" ], "MongoClient connection created");
 
     next();
   });
