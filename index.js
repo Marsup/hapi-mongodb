@@ -16,7 +16,7 @@ exports.register = function (plugin, options, next) {
 
   MongoClient.connect(options.url, options, function (err, db) {
     if (err) {
-      plugin.log([ "hapi-mongodb", "error" ], err);
+      plugin.log([ "hapi-mongodb", "error" ], "Error connecting to MongoDB");
       return next(err)
     }
 
