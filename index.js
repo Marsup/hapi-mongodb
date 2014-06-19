@@ -14,7 +14,7 @@ exports.register = function (plugin, options, next) {
   Hoek.assert(!!options.url, 'MongoDB URL is required');
   options = Hoek.applyToDefaults(defaults, options);
 
-  MongoClient.connect(options.url, options, function (err, db) {
+  MongoClient.connect(options.url, options.settings, function (err, db) {
     if (err) {
       plugin.log([ 'hapi-mongodb', 'error' ], 'Error connecting to MongoDB');
       return next(err)
