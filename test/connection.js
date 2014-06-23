@@ -42,17 +42,15 @@ describe('Hapi server', function() {
   });
 
   it('should not be able to register the plugin without URL', function(done) {
-    assert.throws(function () {
-        server.pack.register({
-            plugin: require('../')
-        }, function () {
-
-        });
-      },
-      /MongoDB URL is required/
-    );
-
-    done();
+    server.pack.register({
+        plugin: require('../')
+    }, function () {
+      assert(
+        server.pack.plugins['hapi-mongodb'].db.options.url === 'mongodb://localhost:27017',
+        'Default mongodb url was not `mongodb://localhost:27017`'
+      );
+      done();
+    });
   });
 
   it('should be able to find the plugin exposed objects', function(done) {

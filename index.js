@@ -5,13 +5,13 @@ var MongoClient = mongodb.MongoClient;
 var ObjectID = mongodb.ObjectID;
 
 var defaults = {
+  url: 'mongodb://localhost:27017',
   settings: {
 
   }
 };
 
 exports.register = function (plugin, options, next) {
-  Hoek.assert(!!options.url, 'MongoDB URL is required');
   options = Hoek.applyToDefaults(defaults, options);
 
   MongoClient.connect(options.url, options.settings, function (err, db) {
