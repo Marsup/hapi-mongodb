@@ -27,6 +27,6 @@
     "hapi": ">= 2.x"
   },
   "peerDependencies": {
-    "hapi": "^2.3.x"
+    "hapi": ">=2.x"
   }
 }

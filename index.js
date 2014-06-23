@@ -1,18 +1,9 @@
-var Hoek = require('hoek');
-
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 var ObjectID = mongodb.ObjectID;
 
-var defaults = {
-  url: 'mongodb://localhost:27017',
-  settings: {
-
-  }
-};
-
 exports.register = function (plugin, options, next) {
-  options = Hoek.applyToDefaults(defaults, options || {});
+  options.url = options.url || 'mongodb://localhost:27017';
 
   MongoClient.connect(options.url, options.settings, function (err, db) {
     if (err) {

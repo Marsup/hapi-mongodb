@@ -4,7 +4,8 @@ This is a plugin to share a common MongoDB connection pool across the whole Hapi
 
 It takes 2 options :
 
-- url: *Required.* MongoDB connection string (eg. `mongodb://user:pass@localhost:27017`),
+- url: *Optional.* MongoDB connection string (eg. `mongodb://user:pass@localhost:27017`),
+    - defaults to `mongodb://localhost:27017`
 - settings: *Optional.* Provide extra settings to the connection, see [documentation](http://mongodb.github.io/node-mongodb-native/driver-articles/mongoclient.html#mongoclient-connect-options).
 
 Several objects are exposed by this plugin :
