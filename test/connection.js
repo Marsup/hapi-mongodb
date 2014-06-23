@@ -41,18 +41,6 @@ describe('Hapi server', function() {
      });
   });
 
-  it('should not be able to register the plugin without URL', function(done) {
-    server.pack.register({
-        plugin: require('../')
-    }, function () {
-      assert(
-        server.pack.plugins['hapi-mongodb'].db.options.url === 'mongodb://localhost:27017',
-        'Default mongodb url was not `mongodb://localhost:27017`'
-      );
-      done();
-    });
-  });
-
   it('should be able to find the plugin exposed objects', function(done) {
     server.pack.register({
       plugin: require('../'),
@@ -69,6 +57,18 @@ describe('Hapi server', function() {
       }});
 
       server.inject({ method: 'GET', url: '/' }, function() {});
+    });
+  });
+
+  it('should use the correct default mongodb url in options', function(done) {
+    server.pack.register({
+      plugin: require('../')
+    }, function () {
+      assert(
+        server.pack.plugins['hapi-mongodb'].db.options.url === 'mongodb://localhost:27017',
+        'Default mongodb url was not `mongodb://localhost:27017`'
+      );
+      done();
     });
   });
 });

@@ -12,7 +12,7 @@ var defaults = {
 };
 
 exports.register = function (plugin, options, next) {
-  options = Hoek.applyToDefaults(defaults, options);
+  options = Hoek.applyToDefaults(defaults, options || {});
 
   MongoClient.connect(options.url, options.settings, function (err, db) {
     if (err) {
