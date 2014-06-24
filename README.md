@@ -32,28 +32,28 @@ var server = new Hapi.Server(8080);
 server.pack.register({
     plugin: require('hapi-mongodb'),
     options: dbOpts
- }, function (err) {
+}, function (err) {
     if (err) {
         console.error(err);
         throw err;
     }
+});
 
-    server.route( {
-        "method"  : "GET",
-        "path"    : "/users/{id}",
-        "handler" : usersHandler
+server.route( {
+    "method"  : "GET",
+    "path"    : "/users/{id}",
+    "handler" : usersHandler
+});
+
+function usersHandler(request, reply) {
+    var db = request.server.plugins['hapi-mongodb'].db;
+    var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+
+    db.collection('users').findOne({  "_id" : new ObjectID(request.params.id) }, function(err, result) {
+        if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
+        reply(result);
     });
-
-    function usersHandler(request, reply) {
-        var db = request.server.plugins['hapi-mongodb'].db;
-        var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
-
-        db.collection('users').findOne({  "_id" : new ObjectID(request.params.id) }, function(err, result) {
-            if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
-            reply(result);
-        });
-    };
- });
+};
 
 server.start(function() {
     console.log("Server started at " + server.info.uri);
