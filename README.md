@@ -1,3 +1,7 @@
+[![Build Status](https://secure.travis-ci.org/Marsup/hapi-mongodb.png)](http://travis-ci.org/Marsup/hapi-mongodb)
+[![Dependencies Status](https://david-dm.org/Marsup/hapi-mongodb.png)](https://david-dm.org/Marsup/hapi-mongodb)
+[![DevDependencies Status](https://david-dm.org/Marsup/hapi-mongodb/dev-status.png)](https://david-dm.org/Marsup/hapi-mongodb#info=devDependencies)
+
 # Hapi-MongoDB
 
 This is a plugin to share a common MongoDB connection pool across the whole Hapi server.
