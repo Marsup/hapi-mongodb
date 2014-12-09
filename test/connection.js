@@ -13,8 +13,8 @@ describe('Hapi server', function() {
   });
 
   it('should be able to register plugin with just URL', function(done) {
-    server.pack.register({
-        plugin: require('../'),
+    server.register({
+        register: require('../'),
         options: {
             url: 'mongodb://localhost:27017'
         }
@@ -25,8 +25,8 @@ describe('Hapi server', function() {
   });
 
   it('should be able to register plugin with URL and settings', function(done) {
-    server.pack.register({
-        plugin: require('../'),
+    server.register({
+        register: require('../'),
         options: {
             url: 'mongodb://localhost:27017',
             settings: {
@@ -42,8 +42,9 @@ describe('Hapi server', function() {
   });
 
   it('should be able to find the plugin exposed objects', function(done) {
-    server.pack.register({
-      plugin: require('../'),
+    server.connection();
+    server.register({
+      register: require('../'),
       options: {
         url: 'mongodb://localhost:27017'
       }
@@ -61,11 +62,11 @@ describe('Hapi server', function() {
   });
 
   it('should use the correct default mongodb url in options', function(done) {
-    server.pack.register({
-      plugin: require('../')
+    server.register({
+      register: require('../')
     }, function () {
       assert(
-        server.pack.plugins['hapi-mongodb'].db.options.url === 'mongodb://localhost:27017',
+        server.plugins['hapi-mongodb'].db.options.url === 'mongodb://localhost:27017',
         'Default mongodb url was not `mongodb://localhost:27017`'
       );
       done();
