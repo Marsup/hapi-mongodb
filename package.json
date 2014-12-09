@@ -24,9 +24,9 @@
   },
   "devDependencies": {
     "mocha": "1.x",
-    "hapi": ">= 2.x"
+    "hapi": ">= 6.1.x"
   },
   "peerDependencies": {
-    "hapi": ">= 2.x"
+    "hapi": ">= 6.1.x"
   }
 }
