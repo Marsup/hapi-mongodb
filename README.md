@@ -1,6 +1,6 @@
-[![Build Status](https://secure.travis-ci.org/Marsup/hapi-mongodb.png)](http://travis-ci.org/Marsup/hapi-mongodb)
-[![Dependencies Status](https://david-dm.org/Marsup/hapi-mongodb.png)](https://david-dm.org/Marsup/hapi-mongodb)
-[![DevDependencies Status](https://david-dm.org/Marsup/hapi-mongodb/dev-status.png)](https://david-dm.org/Marsup/hapi-mongodb#info=devDependencies)
+[![Build Status](https://secure.travis-ci.org/Marsup/hapi-mongodb.svg)](http://travis-ci.org/Marsup/hapi-mongodb)
+[![Dependencies Status](https://david-dm.org/Marsup/hapi-mongodb.svg)](https://david-dm.org/Marsup/hapi-mongodb)
+[![DevDependencies Status](https://david-dm.org/Marsup/hapi-mongodb/dev-status.svg)](https://david-dm.org/Marsup/hapi-mongodb#info=devDependencies)
 
 # Hapi-MongoDB
 
