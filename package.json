@@ -23,7 +23,7 @@
     "mongodb": "1.x"
   },
   "devDependencies": {
-    "mocha": "1.x",
+    "mocha": "2.x",
     "hapi": ">= 6.1.x"
   },
   "peerDependencies": {
