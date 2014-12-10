@@ -6,7 +6,7 @@
 
 This is a plugin to share a common MongoDB connection pool across the whole Hapi server.
 
-It takes 2 options :
+Options can be a single object with the following keys or an array of the same kind if you need multiple connections :
 
 - url: *Optional.* MongoDB connection string (eg. `mongodb://user:pass@localhost:27017`),
     - defaults to `mongodb://localhost:27017`
@@ -14,13 +14,14 @@ It takes 2 options :
 
 Several objects are exposed by this plugin :
 
-- `db` : connection object to the database
+- `db` : connection object to the database, if an array was provided for the configuration, it will be an array of connections in the same order
 - `lib` : mongodb library in case you need to use it
 - `ObjectID` : mongodb ObjectID constructor in case you need to use it
 
 Usage example :
 ```js
 var Hapi = require("hapi");
+var Boom = require("boom");
 
 var dbOpts = {
     "url": "mongodb://localhost:27017/test",
@@ -31,10 +32,10 @@ var dbOpts = {
     }
 };
 
-var server = new Hapi.Server(8080);
+var server = new Hapi.Server();
 
-server.pack.register({
-    plugin: require('hapi-mongodb'),
+server.register({
+    register: require('hapi-mongodb'),
     options: dbOpts
 }, function (err) {
     if (err) {
@@ -54,7 +55,7 @@ function usersHandler(request, reply) {
     var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
 
     db.collection('users').findOne({  "_id" : new ObjectID(request.params.id) }, function(err, result) {
-        if (err) return reply(Hapi.error.internal('Internal MongoDB error', err));
+        if (err) return reply(Boom.internal('Internal MongoDB error', err));
         reply(result);
     });
 };

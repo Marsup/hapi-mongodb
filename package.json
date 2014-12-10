@@ -2,10 +2,9 @@
   "name": "hapi-mongodb",
   "version": "2.2.0",
   "description": "A simple Hapi MongoDB connection plugin.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha",
-    "testwatch": "NODE_ENV=test mocha -w"
+    "test": "lab -M 5000 -t 100 -a code -L"
   },
   "repository": {
     "type": "git",
@@ -20,11 +19,14 @@
     "url": "https://github.com/Marsup/hapi-mongodb/issues"
   },
   "dependencies": {
+    "async": "^0.9.0",
+    "joi": "^5.0.2",
     "mongodb": "1.x"
   },
   "devDependencies": {
-    "mocha": "2.x",
-    "hapi": ">= 6.1.x"
+    "code": "^1.2.1",
+    "hapi": ">= 6.1.x",
+    "lab": "^5.1.0"
   },
   "peerDependencies": {
     "hapi": ">= 6.1.x"
