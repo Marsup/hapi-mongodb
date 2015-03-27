@@ -1,8 +1,26 @@
+# Travis optimizations, see http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+sudo: false
+cache:
+  directories:
+  - node_modules
+install: npm update
+
 language: node_js
 
 node_js:
-  - 0.10
+- '0.10'
+- '0.12'
+- iojs
 
 services:
-  - mongodb
+- mongodb
 
+deploy:
+  provider: npm
+  email: marsup@gmail.com
+  api_key:
+    secure: UZKpSXuvykFX+Z8sNettkKplTicLcomzKREy3COuoJwNTHdissvGvJo3PMQ7gf9N2rQid7Sj2ttFT4wf7/Sw179U55+MPqoADll2IXo40Gt1Ph2ox0FYBcCIhBLm4teeh7wcCQpTMYFHKW6JtjmMp8P/xd7ycXZIdIkcKzco41U=
+  on:
+    branch: master
+    tags: true
+    repo: Marsup/hapi-mongodb
