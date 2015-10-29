@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "async": "^1.4.2",
+    "bluebird": "^3.0.2",
     "joi": "^6.0.8",
     "mongodb": "^2.0.25"
   },
