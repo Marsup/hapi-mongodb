@@ -143,4 +143,20 @@ describe('Hapi server', function () {
             done();
         });
     });
+    it('should require the "promiseLibrary" before passing it to mongodb', function (done) {
+
+        server.register({
+            register: require('../'),
+            options: {
+                settings: {
+                    promiseLibrary: 'bluebird'
+                }
+            }
+        }, function (err) {
+
+            expect(err).to.not.exist();
+
+            done();
+        });
+    });
 });
