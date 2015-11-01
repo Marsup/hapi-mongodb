@@ -143,6 +143,7 @@ describe('Hapi server', function () {
             done();
         });
     });
+
     it('should require the "promiseLibrary" before passing it to mongodb', function (done) {
 
         server.register({
@@ -152,11 +153,6 @@ describe('Hapi server', function () {
                     promiseLibrary: 'bluebird'
                 }
             }
-        }, function (err) {
-
-            expect(err).to.not.exist();
-
-            done();
-        });
+        }, done);
     });
 });
