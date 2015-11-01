@@ -1,64 +1,62 @@
-var Hapi = require('hapi');
-var Lab = require('lab');
-var lab = exports.lab = Lab.script();
-var describe = lab.describe;
-var it = lab.it;
-var beforeEach = lab.beforeEach;
-var expect = require('code').expect;
+'use strict';
 
-describe('Hapi server', function () {
+const Hapi = require('hapi');
+const Lab = require('lab');
+const lab = exports.lab = Lab.script();
+const describe = lab.describe;
+const it = lab.it;
+const beforeEach = lab.beforeEach;
+const expect = require('code').expect;
 
-    var server;
+describe('Hapi server', () => {
 
-    beforeEach(function (done) {
+    let server;
+
+    beforeEach((done) => {
 
         server = new Hapi.Server();
         done();
     });
 
-    it('should reject invalid options', function (done) {
+    it('should reject invalid options', (done) => {
 
         server.register({
             register: require('../'),
             options: {
                 urll: 'mongodb://localhost:27017'
             }
-        }, function (err) {
+        }, (err) => {
 
             expect(err).to.exist();
             done();
         });
     });
 
-    it('should fail with no mongodb listening', function (done) {
+    it('should fail with no mongodb listening', (done) => {
 
         server.register({
             register: require('../'),
             options: {
                 url: 'mongodb://localhost:27018'
             }
-        }, function (err) {
+        }, (err) => {
 
             expect(err).to.exist();
             done();
         });
     });
 
-    it('should be able to register plugin with just URL', function (done) {
+    it('should be able to register plugin with just URL', (done) => {
 
         server.register({
             register: require('../'),
             options: {
                 url: 'mongodb://localhost:27017'
             }
-        }, function (err) {
-
-            expect(err).to.not.exist();
-            done();
-        });
+        }, done);
     });
 
-    it('should be able to register plugin with URL and settings', function (done) {
+    it('should be able to register plugin with URL and settings', (done) => {
 
         server.register({
             register: require('../'),
@@ -72,14 +70,10 @@ describe('Hapi server', function () {
                     }
                 }
             }
-        }, function (err) {
-
-            expect(err).to.not.exist();
-            done();
-        });
+        }, done);
     });
 
-    it('should be able to find the plugin exposed objects', function (done) {
+    it('should be able to find the plugin exposed objects', (done) => {
 
         server.connection();
         server.register({
@@ -87,16 +81,16 @@ describe('Hapi server', function () {
             options: {
                 url: 'mongodb://localhost:27017'
             }
-        }, function (err) {
+        }, (err) => {
 
             expect(err).to.not.exist();
 
             server.route({
                 method: 'GET',
                 path: '/',
-                handler: function (request, reply) {
+                handler: (request, reply) => {
 
-                    var plugin = request.server.plugins['hapi-mongodb'];
+                    const plugin = request.server.plugins['hapi-mongodb'];
                     expect(plugin.db).to.exist();
                     expect(plugin.lib).to.exist();
                     expect(plugin.ObjectID).to.exist();
@@ -108,43 +102,39 @@ describe('Hapi server', function () {
             server.inject({
                 method: 'GET',
                 url: '/'
-            }, function () {});
+            }, () => {});
         });
     });
 
-    it('should use the correct default mongodb url in options', function (done) {
+    it('should use the correct default mongodb url in options', (done) => {
 
         server.register({
             register: require('../')
-        }, function (err) {
+        }, (err) => {
 
             expect(err).to.not.exist();
-
             expect(server.plugins['hapi-mongodb'].db.options.url).to.equal('mongodb://localhost:27017');
             done();
         });
     });
 
-    it('should be able to have multiple connections', function (done) {
+    it('should be able to have multiple connections', (done) => {
 
         server.register({
             register: require('../'),
             options: [{}, {}] // 2 default connections
-        }, function (err) {
+        }, (err) => {
 
             expect(err).to.not.exist();
 
-            var plugin = server.plugins['hapi-mongodb'];
+            const plugin = server.plugins['hapi-mongodb'];
             expect(plugin.db).to.be.an.array().and.to.have.length(2);
-            plugin.db.forEach(function (db) {
-
-                expect(db.options.url).to.equal('mongodb://localhost:27017');
-            });
+            plugin.db.forEach((db) => expect(db.options.url).to.equal('mongodb://localhost:27017'));
             done();
         });
     });
 
-    it('should require the "promiseLibrary" before passing it to mongodb', function (done) {
+    it('should require the "promiseLibrary" before passing it to mongodb', (done) => {
 
         server.register({
             register: require('../'),
