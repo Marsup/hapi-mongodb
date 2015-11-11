@@ -32,6 +32,20 @@ describe('Hapi server', () => {
         });
     });
 
+    it('should reject invalid decorate', (done) => {
+
+        server.register({
+            register: require('../'),
+            options: {
+                decorate: 1
+            }
+        }, (err) => {
+
+            expect(err).to.exist();
+            done();
+        });
+    });
+
     it('should fail with no mongodb listening', (done) => {
 
         server.register({
@@ -94,6 +108,78 @@ describe('Hapi server', () => {
                     expect(plugin.db).to.exist();
                     expect(plugin.lib).to.exist();
                     expect(plugin.ObjectID).to.exist();
+
+                    done();
+                }
+            });
+
+            server.inject({
+                method: 'GET',
+                url: '/'
+            }, () => {});
+        });
+    });
+
+    it('should be able to find the plugin on decorated objects', (done) => {
+
+        server.connection();
+        server.register({
+            register: require('../'),
+            options: {
+                url: 'mongodb://localhost:27017',
+                decorate: true
+            }
+        }, (err) => {
+
+            expect(err).to.not.exist();
+            expect(server.mongo.db).to.exist();
+            expect(server.mongo.lib).to.exist();
+            expect(server.mongo.ObjectID).to.exist();
+
+            server.route({
+                method: 'GET',
+                path: '/',
+                handler: (request, reply) => {
+
+                    expect(request.mongo.db).to.exist();
+                    expect(request.mongo.lib).to.exist();
+                    expect(request.mongo.ObjectID).to.exist();
+
+                    done();
+                }
+            });
+
+            server.inject({
+                method: 'GET',
+                url: '/'
+            }, () => {});
+        });
+    });
+
+    it('should be able to find the plugin on custom decorated objects', (done) => {
+
+        server.connection();
+        server.register({
+            register: require('../'),
+            options: {
+                url: 'mongodb://localhost:27017',
+                decorate: 'db'
+            }
+        }, (err) => {
+
+            expect(err).to.not.exist();
+            expect(server.db.db).to.exist();
+            expect(server.db.lib).to.exist();
+            expect(server.db.ObjectID).to.exist();
+
+            server.route({
+                method: 'GET',
+                path: '/',
+                handler: (request, reply) => {
+
+                    expect(request.db.db).to.exist();
+                    expect(request.db.lib).to.exist();
+                    expect(request.db.ObjectID).to.exist();
 
                     done();
                 }
