@@ -231,4 +231,26 @@ describe('Hapi server', () => {
             }
         }, done);
     });
+
+    it('should disconnect if the server stops', (done) => {
+
+        server.register({
+            register: require('../'),
+            options: {
+                settings: {
+                    promiseLibrary: 'bluebird'
+                }
+            }
+        }, (err) => {
+
+            expect(err).not.to.exist();
+            server.initialize(() => {
+
+                server.stop(() => {
+
+                    setTimeout(done, 100); // Let the connections end.
+                });
+            });
+        });
+    });
 });
