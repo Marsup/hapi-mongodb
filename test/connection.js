@@ -2,6 +2,7 @@
 
 const Hapi = require('hapi');
 const Lab = require('lab');
+const Mongodb = require('mongodb');
 const lab = exports.lab = Lab.script();
 const describe = lab.describe;
 const it = lab.it;
@@ -70,6 +71,33 @@ describe('Hapi server', () => {
         }, done);
     });
 
+    it('should log configuration upon successfull connection', (done) => {
+
+        let logEntry;
+        server.once('log', (entry) => {
+
+            logEntry = entry;
+        });
+
+        server.register({
+            register: require('../'),
+            options: {
+                url: 'mongodb://localhost:27017'
+            }
+        }, (err) => {
+
+            if (err)  {
+                return done(err);
+            }
+            expect(logEntry).to.equal({
+                timestamp: logEntry.timestamp,
+                tags: ['hapi-mongodb', 'info'],
+                data: 'MongoClient connection created for {"url":"mongodb://localhost:27017"}',
+                internal: false
+            });
+            done();
+        });
+    });
     it('should be able to register plugin with URL and settings', (done) => {
 
         server.register({
@@ -199,7 +227,11 @@ describe('Hapi server', () => {
         }, (err) => {
 
             expect(err).to.not.exist();
-            expect(server.plugins['hapi-mongodb'].db.options.url).to.equal('mongodb://localhost:27017');
+            const db = server.plugins['hapi-mongodb'].db;
+            expect(db).to.be.instanceof(Mongodb.Db);
+            expect(db.databaseName).to.equal('test');
+            expect(db.topology.s.clonedOptions.host).to.equal('localhost');
+            expect(db.topology.s.clonedOptions.port).to.equal(27017);
             done();
         });
     });
@@ -215,7 +247,13 @@ describe('Hapi server', () => {
 
             const plugin = server.plugins['hapi-mongodb'];
             expect(plugin.db).to.be.an.array().and.to.have.length(2);
-            plugin.db.forEach((db) => expect(db.options.url).to.equal('mongodb://localhost:27017'));
+            plugin.db.forEach((db) => {
+
+                expect(db).to.be.instanceof(Mongodb.Db);
+                expect(db.databaseName).to.equal('test');
+                expect(db.topology.s.clonedOptions.host).to.equal('localhost');
+                expect(db.topology.s.clonedOptions.port).to.equal(27017);
+            });
             done();
         });
     });

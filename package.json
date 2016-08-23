@@ -25,9 +25,9 @@
   },
   "devDependencies": {
     "bluebird": "3.x.x",
-    "code": "2.x.x",
+    "code": "^3.0.2",
     "hapi": ">= 13.x.x",
-    "lab": "10.x.x"
+    "lab": "^11.0.1"
   },
   "peerDependencies": {
     "hapi": ">= 13.x.x"
