@@ -19,7 +19,7 @@
     "url": "https://github.com/Marsup/hapi-mongodb/issues"
   },
   "dependencies": {
-    "async": "1.x.x",
+    "async": "^2.0.1",
     "joi": "^9.0.4",
     "mongodb": "2.x.x"
   },
