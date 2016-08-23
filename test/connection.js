@@ -98,6 +98,49 @@ describe('Hapi server', () => {
             done();
         });
     });
+
+    it('should log configuration upon successfull connection, obscurifying DB password', (done) => {
+
+        let logEntry;
+        server.once('log', (entry) => {
+
+            logEntry = entry;
+        });
+
+        const originalConnect = Mongodb.MongoClient.connect;
+        let connected = false;
+        Mongodb.MongoClient.connect = (url, options, callback) => {
+
+            Mongodb.MongoClient.connect = originalConnect;
+            expect(url).to.equal('mongodb://user:abcdefg@example.com:27017');
+            expect(options).to.equal({ poolSize: 11 });
+            connected = true;
+            callback(null, { });
+        };
+        server.register({
+            register: require('../'),
+            options: {
+                url: 'mongodb://user:abcdefg@example.com:27017',
+                settings: {
+                    poolSize: 11
+                }
+            }
+        }, (err) => {
+
+            if (err)  {
+                return done(err);
+            }
+            expect(connected).to.be.true();
+            expect(logEntry).to.equal({
+                timestamp: logEntry.timestamp,
+                tags: ['hapi-mongodb', 'info'],
+                data: 'MongoClient connection created for {"url":"mongodb://user:******@example.com:27017","settings":{"poolSize":11}}',
+                internal: false
+            });
+            done();
+        });
+    });
+
     it('should be able to register plugin with URL and settings', (done) => {
 
         server.register({
