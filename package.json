@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "async": "1.x.x",
-    "joi": "8.x.x",
+    "joi": "^9.0.4",
     "mongodb": "2.x.x"
   },
   "devDependencies": {
