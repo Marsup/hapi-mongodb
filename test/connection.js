@@ -2,6 +2,7 @@
 
 const Hapi = require('hapi');
 const Lab = require('lab');
+const Mongodb = require('mongodb');
 const lab = exports.lab = Lab.script();
 const describe = lab.describe;
 const it = lab.it;
@@ -68,6 +69,76 @@ describe('Hapi server', () => {
                 url: 'mongodb://localhost:27017'
             }
         }, done);
+    });
+
+    it('should log configuration upon successfull connection', (done) => {
+
+        let logEntry;
+        server.once('log', (entry) => {
+
+            logEntry = entry;
+        });
+
+        server.register({
+            register: require('../'),
+            options: {
+                url: 'mongodb://localhost:27017'
+            }
+        }, (err) => {
+
+            if (err)  {
+                return done(err);
+            }
+            expect(logEntry).to.equal({
+                timestamp: logEntry.timestamp,
+                tags: ['hapi-mongodb', 'info'],
+                data: 'MongoClient connection created for {"url":"mongodb://localhost:27017"}',
+                internal: false
+            });
+            done();
+        });
+    });
+
+    it('should log configuration upon successfull connection, obscurifying DB password', (done) => {
+
+        let logEntry;
+        server.once('log', (entry) => {
+
+            logEntry = entry;
+        });
+
+        const originalConnect = Mongodb.MongoClient.connect;
+        let connected = false;
+        Mongodb.MongoClient.connect = (url, options, callback) => {
+
+            Mongodb.MongoClient.connect = originalConnect;
+            expect(url).to.equal('mongodb://user:abcdefg@example.com:27017');
+            expect(options).to.equal({ poolSize: 11 });
+            connected = true;
+            callback(null, { });
+        };
+        server.register({
+            register: require('../'),
+            options: {
+                url: 'mongodb://user:abcdefg@example.com:27017',
+                settings: {
+                    poolSize: 11
+                }
+            }
+        }, (err) => {
+
+            if (err)  {
+                return done(err);
+            }
+            expect(connected).to.be.true();
+            expect(logEntry).to.equal({
+                timestamp: logEntry.timestamp,
+                tags: ['hapi-mongodb', 'info'],
+                data: 'MongoClient connection created for {"url":"mongodb://user:******@example.com:27017","settings":{"poolSize":11}}',
+                internal: false
+            });
+            done();
+        });
     });
 
     it('should be able to register plugin with URL and settings', (done) => {
@@ -192,14 +263,39 @@ describe('Hapi server', () => {
         });
     });
 
-    it('should use the correct default mongodb url in options', (done) => {
+    it('should connect to a mongodb instance without providing plugin settings', (done) => {
 
         server.register({
             register: require('../')
         }, (err) => {
 
             expect(err).to.not.exist();
-            expect(server.plugins['hapi-mongodb'].db.options.url).to.equal('mongodb://localhost:27017');
+            const db = server.plugins['hapi-mongodb'].db;
+            expect(db).to.be.instanceof(Mongodb.Db);
+            expect(db.databaseName).to.equal('test');
+            done();
+        });
+    });
+
+    it('should use the correct default mongodb url in options', (done) => {
+
+        const originalConnect = Mongodb.MongoClient.connect;
+        let connected = false;
+        Mongodb.MongoClient.connect = (url, options, callback) => {
+
+            Mongodb.MongoClient.connect = originalConnect;
+            expect(url).to.equal('mongodb://localhost:27017/test');
+            connected = true;
+            callback(null, { dbInstance: true });
+        };
+        server.register({
+            register: require('../')
+        }, (err) => {
+
+            expect(err).to.not.exist();
+            expect(connected).to.be.true();
+            const db = server.plugins['hapi-mongodb'].db;
+            expect(db).to.equal({ dbInstance: true });
             done();
         });
     });
@@ -208,14 +304,18 @@ describe('Hapi server', () => {
 
         server.register({
             register: require('../'),
-            options: [{}, {}] // 2 default connections
+            options: [{ url: 'mongodb://localhost:27017/test0' }, { url: 'mongodb://localhost:27017/test1' }]
         }, (err) => {
 
             expect(err).to.not.exist();
 
             const plugin = server.plugins['hapi-mongodb'];
             expect(plugin.db).to.be.an.array().and.to.have.length(2);
-            plugin.db.forEach((db) => expect(db.options.url).to.equal('mongodb://localhost:27017'));
+            plugin.db.forEach((db, i) => {
+
+                expect(db).to.be.instanceof(Mongodb.Db);
+                expect(db.databaseName).to.equal('test' + i);
+            });
             done();
         });
     });
