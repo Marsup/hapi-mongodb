@@ -263,6 +263,25 @@ describe('Hapi server', () => {
         });
     });
 
+    it('should fail to mix different decorations', (done) => {
+
+        server.connection();
+        server.register({
+            register: require('../'),
+            options: [{
+                url: 'mongodb://localhost:27017',
+                decorate: true
+            }, {
+                url: 'mongodb://localhost:27017',
+                decorate: 'foo'
+            }]
+        }, (err) => {
+
+            expect(err).to.be.an.error('You cannot mix different types of decorate options');
+            done();
+        });
+    });
+
     it('should connect to a mongodb instance without providing plugin settings', (done) => {
 
         server.register({

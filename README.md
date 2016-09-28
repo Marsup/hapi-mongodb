@@ -12,7 +12,7 @@ Options can be a single object with the following keys or an array of the same k
 - url: *Optional.* MongoDB connection string (eg. `mongodb://user:pass@localhost:27017`).
     - defaults to `mongodb://localhost:27017`
 - settings: *Optional.* Provide extra settings to the connection, see [documentation](http://mongodb.github.io/node-mongodb-native/driver-articles/mongoclient.html#mongoclient-connect-options).
-- decorate: *Optional.* Rather have exposed objects accessible through server and request decorations.
+- decorate: *Optional.* Rather have exposed objects accessible through server and request decorations. You cannot mix different types of decorations.
     - If `true`, `server.mongo` or `request.mongo`
     - If it's a string, `server.<string>` or `request.<string>`
 
