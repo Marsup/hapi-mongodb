@@ -24,19 +24,20 @@ Several objects are exposed by this plugin :
 
 Usage example :
 ```js
-var Hapi = require("hapi");
-var Boom = require("boom");
+const Hapi = require('hapi');
+const Boom = require('boom');
 
-var dbOpts = {
-    "url": "mongodb://localhost:27017/test",
-    "settings": {
-        "db": {
-            "native_parser": false
+const dbOpts = {
+    url: 'mongodb://localhost:27017/test',
+    settings: {
+        db: {
+            native_parser: false
         }
-    }
+    },
+    decorate: true
 };
 
-var server = new Hapi.Server();
+const server = new Hapi.Server();
 
 server.register({
     register: require('hapi-mongodb'),
@@ -46,25 +47,27 @@ server.register({
         console.error(err);
         throw err;
     }
-});
 
-server.route( {
-    "method"  : "GET",
-    "path"    : "/users/{id}",
-    "handler" : usersHandler
-});
+    server.route( {
+        method: 'GET',
+        path: '/users/{id}',
+        handler(request, reply) {
+            const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
 
-function usersHandler(request, reply) {
-    var db = request.server.plugins['hapi-mongodb'].db;
-    var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+            db.collection('users').findOne({  _id: new ObjectID(request.params.id) }, function (err, result) {
 
-    db.collection('users').findOne({  "_id" : new ObjectID(request.params.id) }, function(err, result) {
-        if (err) return reply(Boom.internal('Internal MongoDB error', err));
-        reply(result);
+                if (err) {
+                    return reply(Boom.internal('Internal MongoDB error', err));
+                }
+
+                reply(result);
+            });
+        }
     });
-};
 
-server.start(function() {
-    console.log("Server started at " + server.info.uri);
+    server.start(function() {
+        console.log(`Server started at ${server.info.uri}`);
+    });
 });
 ```
