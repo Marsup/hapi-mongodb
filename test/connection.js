@@ -148,11 +148,7 @@ describe('Hapi server', () => {
             options: {
                 url: 'mongodb://localhost:27017',
                 settings: {
-                    db: {
-                        /* eslint-disable camelcase */
-                        native_parser: false
-                        /* eslint-enable camelcase */
-                    }
+                    poolSize: 10
                 }
             }
         }, done);

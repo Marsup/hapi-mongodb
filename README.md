@@ -30,9 +30,7 @@ const Boom = require('boom');
 const dbOpts = {
     url: 'mongodb://localhost:27017/test',
     settings: {
-        db: {
-            native_parser: false
-        }
+        poolSize: 10
     },
     decorate: true
 };
