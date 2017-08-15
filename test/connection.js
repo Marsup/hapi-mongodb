@@ -7,7 +7,7 @@ const lab = exports.lab = Lab.script();
 const describe = lab.describe;
 const it = lab.it;
 const beforeEach = lab.beforeEach;
-const expect = require('code').expect;
+const expect = lab.expect;
 
 describe('Hapi server', () => {
 
