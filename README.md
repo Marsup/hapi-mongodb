@@ -27,45 +27,54 @@ Usage example :
 const Hapi = require('hapi');
 const Boom = require('boom');
 
-const dbOpts = {
-    url: 'mongodb://localhost:27017/test',
-    settings: {
-        poolSize: 10
-    },
-    decorate: true
-};
+const launchServer = async function() {
+    
+    const dbOpts = {
+        url: 'mongodb://localhost:27017/test',
+        settings: {
+            poolSize: 10
+        },
+        decorate: true
+    };
+    
+    const server = Hapi.Server();
+    
+    await server.register({
+        plugin: require('hapi-mongodb'),
+        options: dbOpts
+    });
 
-const server = new Hapi.Server();
-
-server.register({
-    register: require('hapi-mongodb'),
-    options: dbOpts
-}, function (err) {
-    if (err) {
-        console.error(err);
-        throw err;
-    }
-
-    server.route( {
+   server.route( {
         method: 'GET',
         path: '/users/{id}',
-        handler(request, reply) {
+        async handler(request) {
+
             const db = request.mongo.db;
             const ObjectID = request.mongo.ObjectID;
 
-            db.collection('users').findOne({  _id: new ObjectID(request.params.id) }, function (err, result) {
-
-                if (err) {
-                    return reply(Boom.internal('Internal MongoDB error', err));
-                }
-
-                reply(result);
-            });
+            try {
+                const result = await db.collection('users').findOne({  _id: new ObjectID(request.params.id) });
+                return result;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
         }
     });
 
-    server.start(function() {
-        console.log(`Server started at ${server.info.uri}`);
-    });
+    await server.start();
+    console.log(`Server started at ${server.info.uri}`);
+};
+
+launchServer().catch((err) => {
+    console.error(err);
+    process.exit(1);
 });
 ```
+
+## Compatibility level
+
+* Hapi >= 17
+* Node.js >= 8
+
+Ships with `mongodb` >= 2.
