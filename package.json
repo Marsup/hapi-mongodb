@@ -1,6 +1,6 @@
 {
   "name": "hapi-mongodb",
-  "version": "6.2.1",
+  "version": "7.0.0",
   "description": "A simple Hapi MongoDB connection plugin.",
   "main": "lib/index.js",
   "scripts": {
