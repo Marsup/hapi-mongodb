@@ -37,7 +37,7 @@ const launchServer = async function() {
         decorate: true
     };
     
-    const server = Hapi.Server();
+    const server = Hapi.server();
     
     await server.register({
         plugin: require('hapi-mongodb'),
