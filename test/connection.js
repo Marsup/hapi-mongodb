@@ -254,17 +254,17 @@ describe('Hapi server', () => {
 
         const db = server.plugins['hapi-mongodb'].db;
         expect(db).to.be.instanceof(Mongodb.Db);
-        expect(db.databaseName).to.equal('test');
+        expect(db.databaseName).to.equal('admin');
     });
 
     it('should use the correct default mongodb url in options', async () => {
 
         const originalConnect = Mongodb.MongoClient.connect;
         let connected = false;
-        Mongodb.MongoClient.connect = (url, options) => {
+        Mongodb.MongoClient.connect = async (url, options) => {
 
             Mongodb.MongoClient.connect = originalConnect;
-            expect(url).to.equal('mongodb://localhost:27017/test');
+            expect(url).to.equal('mongodb://localhost:27017');
             connected = true;
             return Promise.resolve({ dbInstance: true });
         };
@@ -286,7 +286,7 @@ describe('Hapi server', () => {
         const plugin = server.plugins['hapi-mongodb'];
         expect(plugin.db).to.be.an.array().and.to.have.length(2);
         plugin.db.forEach((db, i) => {
-
+            
             expect(db).to.be.instanceof(Mongodb.Db);
             expect(db.databaseName).to.equal('test' + i);
         });
