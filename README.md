@@ -11,14 +11,15 @@ Options can be a single object with the following keys or an array of the same k
 
 - url: *Optional.* MongoDB connection string (eg. `mongodb://user:pass@localhost:27017`).
     - defaults to `mongodb://localhost:27017`
-- settings: *Optional.* Provide extra settings to the connection, see [documentation](http://mongodb.github.io/node-mongodb-native/2.2/api/MongoClient.html#.connect).
+- settings: *Optional.* Provide extra settings to the connection, see [documentation](http://mongodb.github.io/node-mongodb-native/3.1/api/MongoClient.html#.connect).
 - decorate: *Optional.* Rather have exposed objects accessible through server and request decorations. You cannot mix different types of decorations.
     - If `true`, `server.mongo` or `request.mongo`
     - If it's a string, `server.<string>` or `request.<string>`
 
 Several objects are exposed by this plugin :
 
-- `db` : connection object to the database, if an array was provided for the configuration, it will be an array of connections in the same order
+- `client` : [`MongoClient`](http://mongodb.github.io/node-mongodb-native/3.1/api/MongoClient.html) for that connection. If an array was provided for the configuration, it will be an array of `MongoClient`s in the same order
+- `db` : [`Db`](http://mongodb.github.io/node-mongodb-native/3.1/api/Db.html) for that connection. If an array was provided for the configuration, it will be an array of `Db`s in the same order
 - `lib` : mongodb library in case you need to use it
 - `ObjectID` : mongodb ObjectID constructor in case you need to use it
 
@@ -77,4 +78,4 @@ launchServer().catch((err) => {
 * Hapi >= 17
 * Node.js >= 8
 
-Ships with `mongodb` >= 2.
+Ships with `mongodb` 3.x.
