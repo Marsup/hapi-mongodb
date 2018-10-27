@@ -111,7 +111,7 @@ describe('Hapi server', () => {
             expect(url).to.equal('mongodb://user:abcdefg@example.com:27017');
             expect(options).to.equal({ poolSize: 11 });
             connected = true;
-            return Promise.resolve({});
+            return Promise.resolve({ db: () => 'test-db' });
         };
         await server.register({
             plugin: require('../'),
@@ -161,6 +161,7 @@ describe('Hapi server', () => {
 
                 const plugin = request.server.plugins['hapi-mongodb'];
                 expect(plugin.db).to.exist();
+                expect(plugin.client).to.exist();
                 expect(plugin.lib).to.exist();
                 expect(plugin.ObjectID).to.exist();
                 return Promise.resolve(null);
@@ -181,6 +182,7 @@ describe('Hapi server', () => {
         });
 
         expect(server.mongo.db).to.exist();
+        expect(server.mongo.client).to.exist();
         expect(server.mongo.lib).to.exist();
         expect(server.mongo.ObjectID).to.exist();
 
@@ -190,6 +192,7 @@ describe('Hapi server', () => {
             handler(request) {
 
                 expect(request.mongo.db).to.exist();
+                expect(request.mongo.client).to.exist();
                 expect(request.mongo.lib).to.exist();
                 expect(request.mongo.ObjectID).to.exist();
                 return Promise.resolve(null);
@@ -210,6 +213,7 @@ describe('Hapi server', () => {
         });
 
         expect(server.db.db).to.exist();
+        expect(server.db.client).to.exist();
         expect(server.db.lib).to.exist();
         expect(server.db.ObjectID).to.exist();
 
@@ -219,6 +223,7 @@ describe('Hapi server', () => {
             handler(request) {
 
                 expect(request.db.db).to.exist();
+                expect(request.db.client).to.exist();
                 expect(request.db.lib).to.exist();
                 expect(request.db.ObjectID).to.exist();
                 return Promise.resolve(null);
@@ -266,14 +271,14 @@ describe('Hapi server', () => {
             Mongodb.MongoClient.connect = originalConnect;
             expect(url).to.equal('mongodb://localhost:27017/test');
             connected = true;
-            return Promise.resolve({ dbInstance: true });
+            return Promise.resolve({ dbInstance: true, db: () => 'test-db' });
         };
 
         await server.register({ plugin: require('../') });
 
         expect(connected).to.be.true();
         const db = server.plugins['hapi-mongodb'].db;
-        expect(db).to.equal({ dbInstance: true });
+        expect(db).to.equal('test-db');
     });
 
     it('should be able to have multiple connections', async () => {
