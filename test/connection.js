@@ -4,6 +4,7 @@ const Hapi = require('hapi');
 const Hoek = require('hoek');
 const Lab = require('lab');
 const Mongodb = require('mongodb');
+
 const { describe, it, beforeEach, expect } = exports.lab = Lab.script();
 
 describe('Hapi server', () => {
@@ -113,6 +114,7 @@ describe('Hapi server', () => {
             connected = true;
             return Promise.resolve({ db: () => 'test-db' });
         };
+
         await server.register({
             plugin: require('../'),
             options: {
