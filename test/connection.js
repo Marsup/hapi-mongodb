@@ -72,7 +72,7 @@ describe('Hapi server', () => {
         });
     });
 
-    it('should log configuration upon successfull connection', async () => {
+    it('should log configuration upon successful connection', async () => {
 
         let logEntry;
         server.events.once('log', (entry) => {
@@ -318,5 +318,18 @@ describe('Hapi server', () => {
         await server.initialize();
         await server.stop();
         await Hoek.wait(100); // Let the connections end.
+    });
+
+    it('should be able to find the plugin exposed objects', async () => {
+
+        await server.register({
+            plugin: require('../'),
+            options: {
+                url: 'mongodb://localhost:27017'
+            }
+        });
+
+        const res = await server.plugins['hapi-mongodb'].db.collection('test').find().toArray();
+        expect(res).to.equal([]);
     });
 });
