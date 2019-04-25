@@ -4,7 +4,7 @@
   "description": "A simple Hapi MongoDB connection plugin.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "lab -M 5000 -t 100 -a code -L"
+    "test": "lab -M 5000 -t 100 -a @hapi/code -L"
   },
   "repository": {
     "type": "git",
@@ -22,17 +22,17 @@
     "node": ">= 8"
   },
   "dependencies": {
-    "joi": "14.x.x",
-    "mongodb": "^3.1.8"
+    "@hapi/joi": "^15.0.0",
+    "mongodb": "^3.2.3"
   },
   "devDependencies": {
-    "bluebird": "3.x.x",
-    "code": "5.x.x",
-    "hapi": ">= 17.x.x",
-    "hoek": "5.x.x",
-    "lab": "17.x.x"
+    "@hapi/code": "^5.3.1",
+    "@hapi/hapi": ">= 18.0.0",
+    "@hapi/hoek": "^6.2.1",
+    "@hapi/lab": "^18.1.2",
+    "bluebird": "3.x.x"
   },
   "peerDependencies": {
-    "hapi": ">= 17.x.x"
+    "@hapi/hapi": ">= 18.0.0"
   }
 }
