@@ -1,8 +1,8 @@
 'use strict';
 
-const Hapi = require('hapi');
-const Hoek = require('hoek');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Hoek = require('@hapi/hoek');
+const Lab = require('@hapi/lab');
 const Mongodb = require('mongodb');
 
 const { describe, it, beforeEach, expect } = exports.lab = Lab.script();
