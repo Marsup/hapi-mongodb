@@ -4,7 +4,7 @@
   "description": "A simple Hapi MongoDB connection plugin.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "lab -M 5000 -t 100 -a @hapi/code -L"
+    "test": "lab -M 5000 -t 100 -a @hapi/code"
   },
   "repository": {
     "type": "git",
