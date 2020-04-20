@@ -22,14 +22,14 @@
     "node": ">= 8"
   },
   "dependencies": {
-    "@hapi/joi": "^15.0.0",
-    "mongodb": "^3.2.3"
+    "@hapi/joi": "^17.1.1",
+    "mongodb": "^3.5.6"
   },
   "devDependencies": {
-    "@hapi/code": "^5.3.1",
-    "@hapi/hapi": ">= 18.0.0",
-    "@hapi/hoek": "^6.2.1",
-    "@hapi/lab": "^18.1.2",
+    "@hapi/code": "^8.0.1",
+    "@hapi/hapi": ">= 19.0.0",
+    "@hapi/hoek": "^9.0.4",
+    "@hapi/lab": "^22.0.4",
     "bluebird": "3.x.x"
   },
   "peerDependencies": {
