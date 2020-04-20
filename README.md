@@ -9,12 +9,12 @@ This is a plugin to share a common MongoDB connection pool across the whole Hapi
 
 Options can be a single object with the following keys or an array of the same kind if you need multiple connections :
 
-- url: *Optional.* MongoDB connection string (eg. `mongodb://user:pass@localhost:27017`).
-    - defaults to `mongodb://localhost:27017`
-- settings: *Optional.* Provide extra settings to the connection, see [documentation](http://mongodb.github.io/node-mongodb-native/3.1/api/MongoClient.html#.connect).
-- decorate: *Optional.* Rather have exposed objects accessible through server and request decorations. You cannot mix different types of decorations.
-    - If `true`, `server.mongo` or `request.mongo`
-    - If it's a string, `server.<string>` or `request.<string>`
+- url: _Optional._ MongoDB connection string (eg. `mongodb://user:pass@localhost:27017`).
+  - defaults to `mongodb://localhost:27017`
+- settings: _Optional._ Provide extra settings to the connection, see [documentation](http://mongodb.github.io/node-mongodb-native/3.1/api/MongoClient.html#.connect).
+- decorate: _Optional._ Rather have exposed objects accessible through server and request decorations. You cannot mix different types of decorations.
+  - If `true`, `server.mongo` or `request.mongo`
+  - If it's a string, `server.<string>` or `request.<string>`
 
 Several objects are exposed by this plugin :
 
@@ -24,58 +24,58 @@ Several objects are exposed by this plugin :
 - `ObjectID` : mongodb ObjectID constructor in case you need to use it
 
 Usage example :
+
 ```js
-const Hapi = require('hapi');
-const Boom = require('boom');
+const Hapi = require("hapi");
+const Boom = require("boom");
 
-const launchServer = async function() {
-    
-    const dbOpts = {
-        url: 'mongodb://localhost:27017/test',
-        settings: {
-            poolSize: 10
-        },
-        decorate: true
-    };
-    
-    const server = Hapi.server();
-    
-    await server.register({
-        plugin: require('hapi-mongodb'),
-        options: dbOpts
-    });
+const launchServer = async function () {
+  const dbOpts = {
+    url: "mongodb://localhost:27017/test",
+    settings: {
+      poolSize: 10,
+    },
+    decorate: true,
+  };
 
-   server.route( {
-        method: 'GET',
-        path: '/users/{id}',
-        async handler(request) {
+  const server = Hapi.server();
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
+  await server.register({
+    plugin: require("hapi-mongodb"),
+    options: dbOpts,
+  });
 
-            try {
-                const result = await db.collection('users').findOne({  _id: new ObjectID(request.params.id) });
-                return result;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        }
-    });
+  server.route({
+    method: "GET",
+    path: "/users/{id}",
+    async handler(request) {
+      const db = request.mongo.db;
+      const ObjectID = request.mongo.ObjectID;
 
-    await server.start();
-    console.log(`Server started at ${server.info.uri}`);
+      try {
+        const result = await db
+          .collection("users")
+          .findOne({ _id: new ObjectID(request.params.id) });
+        return result;
+      } catch (err) {
+        throw Boom.internal("Internal MongoDB error", err);
+      }
+    },
+  });
+
+  await server.start();
+  console.log(`Server started at ${server.info.uri}`);
 };
 
 launchServer().catch((err) => {
-    console.error(err);
-    process.exit(1);
+  console.error(err);
+  process.exit(1);
 });
 ```
 
 ## Compatibility level
 
-* Hapi >= 17
-* Node.js >= 8
+- Hapi >= 17
+- Node.js >= 8
 
 Ships with `mongodb` 3.x.
