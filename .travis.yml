@@ -2,9 +2,26 @@ sudo: false
 language: node_js
 
 node_js:
-- "8"
-- "9"
+- "10"
+- "12"
+- "14"
 - "node"
+
+env:
+  - HAPI=18
+  - HAPI=19
 
 services:
 - mongodb
+
+before_install:
+  - sudo apt-get install jq moreutils
+  - jq ".devDependencies[\"@hapi/hapi\"]=\"${HAPI}.x.x\"" package.json | sponge package.json
+
+jobs:
+  exclude:
+    - node_js: 10
+      env: HAPI=19
+  include:
+    - node_js: node
+      env: HAPI=x
