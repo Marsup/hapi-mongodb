@@ -22,7 +22,7 @@
     "node": ">= 8"
   },
   "dependencies": {
-    "@hapi/joi": "^16.1.8",
+    "joi": "^17.2.1",
     "mongodb": "^3.2.3"
   },
   "devDependencies": {
