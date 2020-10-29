@@ -10,6 +10,7 @@ node_js:
 env:
   - HAPI=18
   - HAPI=19
+  - HAPI=20
 
 services:
 - mongodb
@@ -22,6 +23,8 @@ jobs:
   exclude:
     - node_js: 10
       env: HAPI=19
+    - node_js: 10
+      env: HAPI=20
   include:
     - node_js: node
       env: HAPI=x
