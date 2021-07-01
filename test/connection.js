@@ -4,6 +4,7 @@ const Hapi = require('@hapi/hapi');
 const Hoek = require('@hapi/hoek');
 const Lab = require('@hapi/lab');
 const Mongodb = require('mongodb');
+const Sinon = require('sinon');
 
 const { describe, it, beforeEach, expect } = exports.lab = Lab.script();
 
@@ -314,17 +315,48 @@ describe('Hapi server', () => {
     it('should disconnect if the server stops', async () => {
 
         await server.register({
-            plugin: require('../'),
-            options: {
-                settings: {
-                    promiseLibrary: 'bluebird'
-                }
-            }
+            plugin: require('../')
         });
 
         await server.initialize();
+
+        expect(server.plugins['hapi-mongodb'].client.isConnected()).to.be.true();
+
         await server.stop();
         await Hoek.wait(100); // Let the connections end.
+
+        expect(server.plugins['hapi-mongodb'].client.isConnected()).to.be.false();
+    });
+
+    it('should logs errors on disconnect', async () => {
+
+        const logEntries = [];
+        server.events.on('log', (entry) => {
+
+            logEntries.push(entry);
+        });
+
+        await server.register({
+            plugin: require('../')
+        });
+
+        await server.initialize();
+
+        expect(server.plugins['hapi-mongodb'].client.isConnected()).to.be.true();
+        const closeStub = Sinon.stub(server.plugins['hapi-mongodb'].client, 'close').callsFake((cb) => {
+
+            setTimeout(cb, 0, new Error('Oops'));
+        });
+
+        await server.stop();
+        await Hoek.wait(100); // Let the connections end.
+
+        closeStub.restore();
+        await server.plugins['hapi-mongodb'].client.close();
+
+        expect(logEntries).to.have.length(2);
+        expect(logEntries[1].tags).to.equal(['hapi-mongodb', 'error']);
+        expect(logEntries[1].error).to.be.an.error('Oops');
     });
 
     it('should be able to find the plugin exposed objects', async () => {
