@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu]
+        node: ['*', '14', '12', '10']
+        hapi: ['20', '19', '18']
+        exclude:
+          - node: 10
+            hapi: 19
+          - node: 10
+            hapi: 20
+        include:
+          - os: ubuntu
+            node: '*'
+            hapi: 'latest'
+
+    services:
+      mongodb:
+        image: mongo:4
+        ports:
+          - 27017:27017
+
+    runs-on: ${{ matrix.os }}-latest
+    name: ${{ matrix.os }} node@${{ matrix.node }} hapi@${{ matrix.hapi }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+          check-latest: ${{ matrix.node == '*' }}
+
+      - name: install
+        run: npm install
+
+      - name: install hapi
+        run: npm install @hapi/hapi@${{ matrix.hapi }}
+
+      - name: test
+        run: npm test
