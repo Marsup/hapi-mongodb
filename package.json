@@ -19,11 +19,11 @@
     "url": "https://github.com/Marsup/hapi-mongodb/issues"
   },
   "engines": {
-    "node": ">= 8"
+    "node": ">= 12"
   },
   "dependencies": {
     "joi": "^17.2.1",
-    "mongodb": "^3.2.3"
+    "mongodb": "^4.0.1"
   },
   "devDependencies": {
     "@hapi/code": "^8.0.2",

@@ -12,13 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu]
-        node: ['*', '14', '12', '10']
+        node: ['*', '16', '14', '12']
         hapi: ['20', '19', '18']
-        exclude:
-          - node: 10
-            hapi: 19
-          - node: 10
-            hapi: 20
         include:
           - os: ubuntu
             node: '*'
