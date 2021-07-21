@@ -54,7 +54,10 @@ describe('Hapi server', () => {
             await server.register({
                 plugin: require('../'),
                 options: {
-                    url: 'mongodb://localhost:27018'
+                    url: 'mongodb://localhost:27018',
+                    settings: {
+                        serverSelectionTimeoutMS: 500
+                    }
                 }
             });
         }
@@ -97,7 +100,7 @@ describe('Hapi server', () => {
         });
     });
 
-    it('should log configuration upon successfull connection, obscurifying DB password', async () => {
+    it('should log configuration upon successful connection, obscurifying DB password', async () => {
 
         let logEntry;
         server.events.once('log', (entry) => {
@@ -111,7 +114,7 @@ describe('Hapi server', () => {
 
             Mongodb.MongoClient.connect = originalConnect;
             expect(url).to.equal('mongodb://user:abcdefg@example.com:27017');
-            expect(options).to.equal({ poolSize: 11 });
+            expect(options).to.equal({ maxPoolSize: 11 });
             connected = true;
             return Promise.resolve({ db: () => 'test-db' });
         };
@@ -121,7 +124,7 @@ describe('Hapi server', () => {
             options: {
                 url: 'mongodb://user:abcdefg@example.com:27017',
                 settings: {
-                    poolSize: 11
+                    maxPoolSize: 11
                 }
             }
         });
@@ -131,7 +134,7 @@ describe('Hapi server', () => {
             channel: 'app',
             timestamp: logEntry.timestamp,
             tags: ['hapi-mongodb', 'info'],
-            data: 'MongoClient connection created for {"url":"mongodb://user:******@example.com:27017","settings":{"poolSize":11}}'
+            data: 'MongoClient connection created for {"url":"mongodb://user:******@example.com:27017","settings":{"maxPoolSize":11}}'
         });
     });
 
@@ -142,7 +145,7 @@ describe('Hapi server', () => {
             options: {
                 url: 'mongodb://localhost:27017',
                 settings: {
-                    poolSize: 10
+                    maxPoolSize: 10
                 }
             }
         });
@@ -320,12 +323,12 @@ describe('Hapi server', () => {
 
         await server.initialize();
 
-        expect(server.plugins['hapi-mongodb'].client.isConnected()).to.be.true();
+        expect(server.plugins['hapi-mongodb'].client.topology.isConnected()).to.be.true();
 
         await server.stop();
         await Hoek.wait(100); // Let the connections end.
 
-        expect(server.plugins['hapi-mongodb'].client.isConnected()).to.be.false();
+        expect(server.plugins['hapi-mongodb'].client.topology).to.be.undefined();
     });
 
     it('should logs errors on disconnect', async () => {
@@ -342,7 +345,7 @@ describe('Hapi server', () => {
 
         await server.initialize();
 
-        expect(server.plugins['hapi-mongodb'].client.isConnected()).to.be.true();
+        expect(server.plugins['hapi-mongodb'].client.topology.isConnected()).to.be.true();
         const closeStub = Sinon.stub(server.plugins['hapi-mongodb'].client, 'close').callsFake((cb) => {
 
             setTimeout(cb, 0, new Error('Oops'));
