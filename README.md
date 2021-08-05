@@ -1,7 +1,5 @@
 [![npm version](https://badge.fury.io/js/hapi-mongodb.svg)](http://badge.fury.io/js/hapi-mongodb)
-[![Build Status](https://secure.travis-ci.org/Marsup/hapi-mongodb.svg)](http://travis-ci.org/Marsup/hapi-mongodb)
-[![Dependencies Status](https://david-dm.org/Marsup/hapi-mongodb.svg)](https://david-dm.org/Marsup/hapi-mongodb)
-[![DevDependencies Status](https://david-dm.org/Marsup/hapi-mongodb/dev-status.svg)](https://david-dm.org/Marsup/hapi-mongodb#info=devDependencies)
+[![Build Status](https://github.com/Marsup/hapi-mongodb/actions/workflows/ci.yml/badge.svg)](https://github.com/Marsup/hapi-mongodb/actions?query=workflow%3Aci)
 
 # Hapi-MongoDB
 
