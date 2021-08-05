@@ -138,6 +138,44 @@ describe('Hapi server', () => {
         });
     });
 
+    it('should handle other format of connection string', async () => {
+
+        let logEntry;
+        server.events.once('log', (entry) => {
+
+            logEntry = entry;
+        });
+
+        const originalConnect = Mongodb.MongoClient.connect;
+        let connected = false;
+        Mongodb.MongoClient.connect = (url, options) => {
+
+            Mongodb.MongoClient.connect = originalConnect;
+            expect(url).to.equal('mongodb://user:abcdfg@example.com:10255/?ssl=true&appName=@user@');
+            expect(options).to.equal({ maxPoolSize: 11 });
+            connected = true;
+            return Promise.resolve({ db: () => 'test-db' });
+        };
+
+        await server.register({
+            plugin: require('../'),
+            options: {
+                url: 'mongodb://user:abcdfg@example.com:10255/?ssl=true&appName=@user@',
+                settings: {
+                    maxPoolSize: 11
+                }
+            }
+        });
+
+        expect(connected).to.be.true();
+        expect(logEntry).to.equal({
+            channel: 'app',
+            timestamp: logEntry.timestamp,
+            tags: ['hapi-mongodb', 'info'],
+            data: 'MongoClient connection created for {"url":"mongodb://user:******@example.com:10255/?ssl=true&appName=@user@","settings":{"maxPoolSize":11}}'
+        });
+    });
+
     it('should be able to register plugin with URL and settings', async () => {
 
         await server.register({
