@@ -138,6 +138,45 @@ describe('Hapi server', () => {
         });
     });
 
+    it('should log configuration upon successful connection, obscurifying DB password for the DNS Seed List Connection Format', async () => {
+
+        let logEntry;
+        server.events.once('log', (entry) => {
+
+            logEntry = entry;
+        });
+
+        const originalConnect = Mongodb.MongoClient.connect;
+        let connected = false;
+        Mongodb.MongoClient.connect = (url, options) => {
+
+            Mongodb.MongoClient.connect = originalConnect;
+            expect(url).to.equal('mongodb+srv://user:abcdefg@aasdcaasdf.mongodb.net/admin?replicaSet=api-shard-0&readPreference=primary&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1');
+            expect(options).to.equal({ maxPoolSize: 11, useNewUrlParser: true });
+            connected = true;
+            return Promise.resolve({ db: () => 'test-db' });
+        };
+
+        await server.register({
+            plugin: require('../'),
+            options: {
+                url: 'mongodb+srv://user:abcdefg@aasdcaasdf.mongodb.net/admin?replicaSet=api-shard-0&readPreference=primary&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1',
+                settings: {
+                    maxPoolSize: 11,
+                    useNewUrlParser: true
+                }
+            }
+        });
+
+        expect(connected).to.be.true();
+        expect(logEntry).to.equal({
+            channel: 'app',
+            timestamp: logEntry.timestamp,
+            tags: ['hapi-mongodb', 'info'],
+            data: 'MongoClient connection created for {"url":"mongodb://user:******@aasdcaasdf.mongodb.net/admin?replicaSet=api-shard-0&readPreference=primary&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1","settings":{"maxPoolSize":11,"useNewUrlParser":true}}'
+        });
+    });
+
     it('should handle other format of connection string', async () => {
 
         let logEntry;
