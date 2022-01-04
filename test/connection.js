@@ -173,7 +173,7 @@ describe('Hapi server', () => {
             channel: 'app',
             timestamp: logEntry.timestamp,
             tags: ['hapi-mongodb', 'info'],
-            data: 'MongoClient connection created for {"url":"mongodb://user:******@aasdcaasdf.mongodb.net/admin?replicaSet=api-shard-0&readPreference=primary&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1","settings":{"maxPoolSize":11,"useNewUrlParser":true}}'
+            data: 'MongoClient connection created for {"url":"mongodb+srv://user:******@aasdcaasdf.mongodb.net/admin?replicaSet=api-shard-0&readPreference=primary&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-1","settings":{"maxPoolSize":11,"useNewUrlParser":true}}'
         });
     });
 
