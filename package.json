@@ -22,7 +22,7 @@
     "node": ">= 12"
   },
   "dependencies": {
-    "joi": "^17.2.1",
+    "joi": "^17.6.0",
     "mongodb": "^4.0.1"
   },
   "devDependencies": {
