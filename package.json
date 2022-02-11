@@ -26,10 +26,10 @@
     "mongodb": "^4.3.1"
   },
   "devDependencies": {
-    "@hapi/code": "^8.0.2",
+    "@hapi/code": "^8.0.7",
     "@hapi/hapi": "^18.4.1",
-    "@hapi/hoek": "^9.1.0",
-    "@hapi/lab": "^24.1.0",
+    "@hapi/hoek": "^9.2.1",
+    "@hapi/lab": "^24.5.1",
     "bluebird": "3.x",
     "sinon": "^13.0.1"
   },
