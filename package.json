@@ -31,7 +31,7 @@
     "@hapi/hoek": "^10.0.0",
     "@hapi/lab": "^25.0.1",
     "bluebird": "3.x",
-    "sinon": "^13.0.2"
+    "sinon": "^14.0.0"
   },
   "peerDependencies": {
     "@hapi/hapi": ">= 18.0.0"
