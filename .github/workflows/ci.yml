@@ -12,16 +12,16 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu]
-        node: ['*', '16', '14']
-        hapi: ['20', '19', '18']
+        node: ['latest', '20', '18']
+        hapi: ['21', '20']
         include:
           - os: ubuntu
-            node: '*'
+            node: 'latest'
             hapi: 'latest'
 
     services:
       mongodb:
-        image: mongo:4
+        image: mongo:6
         ports:
           - 27017:27017
 
