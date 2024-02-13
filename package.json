@@ -33,6 +33,6 @@
     "sinon": "^17.0.1"
   },
   "peerDependencies": {
-    "@hapi/hapi": ">= 20.0.0"
+    "@hapi/hapi": ">= 20.3.0"
   }
 }
