@@ -73,7 +73,7 @@ launchServer().catch((err) => {
 
 ## Compatibility level
 
-* Hapi >= 17
-* Node.js >= 8
+* Hapi >= 20
+* Node.js >= 18
 
-Ships with `mongodb` 3.x.
+Ships with `mongodb` 6.x.

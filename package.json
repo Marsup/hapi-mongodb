@@ -19,21 +19,20 @@
     "url": "https://github.com/Marsup/hapi-mongodb/issues"
   },
   "engines": {
-    "node": ">= v12.22.12"
+    "node": ">= v18"
   },
   "dependencies": {
-    "joi": "^17.6.0",
-    "mongodb": "^4.16.0"
+    "joi": "^17.12.1",
+    "mongodb": "^6.3.0"
   },
   "devDependencies": {
-    "@hapi/code": "^9.0.0",
-    "@hapi/hapi": "^20.2.2",
-    "@hapi/hoek": "^10.0.0",
-    "@hapi/lab": "^25.0.1",
-    "bluebird": "3.x",
-    "sinon": "^15.2.0"
+    "@hapi/code": "^9.0.3",
+    "@hapi/hapi": "^21.3.3",
+    "@hapi/hoek": "^11.0.4",
+    "@hapi/lab": "^25.2.0",
+    "sinon": "^17.0.1"
   },
   "peerDependencies": {
-    "@hapi/hapi": ">= 18.0.0"
+    "@hapi/hapi": ">= 20.0.0"
   }
 }

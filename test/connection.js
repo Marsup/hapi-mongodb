@@ -1,5 +1,6 @@
 'use strict';
 
+const Timers = require('node:timers/promises');
 const Hapi = require('@hapi/hapi');
 const Hoek = require('@hapi/hoek');
 const Lab = require('@hapi/lab');
@@ -380,18 +381,6 @@ describe('Hapi server', () => {
         });
     });
 
-    it('should require the "promiseLibrary" before passing it to mongodb', async () => {
-
-        await server.register({
-            plugin: require('../'),
-            options: {
-                settings: {
-                    promiseLibrary: 'bluebird'
-                }
-            }
-        });
-    });
-
     it('should disconnect if the server stops', async () => {
 
         await server.register({
@@ -423,9 +412,10 @@ describe('Hapi server', () => {
         await server.initialize();
 
         expect(server.plugins['hapi-mongodb'].client.topology.isConnected()).to.be.true();
-        const closeStub = Sinon.stub(server.plugins['hapi-mongodb'].client, 'close').callsFake((cb) => {
+        const closeStub = Sinon.stub(server.plugins['hapi-mongodb'].client, 'close').callsFake(async () => {
 
-            setTimeout(cb, 0, new Error('Oops'));
+            await Timers.setTimeout(1);
+            throw new Error('Oops');
         });
 
         await server.stop();
