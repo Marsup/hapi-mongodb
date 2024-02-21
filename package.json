@@ -22,7 +22,7 @@
     "node": ">= v18"
   },
   "dependencies": {
-    "joi": "^17.12.1",
+    "joi": "^17.12.2",
     "mongodb": "^6.3.0"
   },
   "devDependencies": {
@@ -33,6 +33,6 @@
     "sinon": "^17.0.1"
   },
   "peerDependencies": {
-    "@hapi/hapi": ">= 20.0.0"
+    "@hapi/hapi": ">= 20.3.0"
   }
 }
