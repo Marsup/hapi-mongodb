@@ -22,12 +22,12 @@
     "node": ">= v18"
   },
   "dependencies": {
-    "joi": "^17.12.2",
+    "joi": "^17.13.1",
     "mongodb": "^6.6.1"
   },
   "devDependencies": {
     "@hapi/code": "^9.0.3",
-    "@hapi/hapi": "^21.3.7",
+    "@hapi/hapi": "^21.3.9",
     "@hapi/hoek": "^11.0.4",
     "@hapi/lab": "^25.2.0",
     "sinon": "^17.0.1"
