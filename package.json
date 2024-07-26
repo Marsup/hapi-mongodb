@@ -29,7 +29,7 @@
     "@hapi/code": "^9.0.3",
     "@hapi/hapi": "^21.3.10",
     "@hapi/hoek": "^11.0.4",
-    "@hapi/lab": "^25.2.0",
+    "@hapi/lab": "^25.3.0",
     "sinon": "^18.0.0"
   },
   "peerDependencies": {
