@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "joi": "^17.13.3",
-    "mongodb": "^6.8.0"
+    "mongodb": "^6.8.1"
   },
   "devDependencies": {
     "@hapi/code": "^9.0.3",
