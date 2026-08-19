@@ -22,17 +22,17 @@
     "node": ">= v18"
   },
   "dependencies": {
-    "joi": "^17.13.3",
+    "joi": "^18.2.5",
     "mongodb": "^6.15.0"
   },
   "devDependencies": {
     "@hapi/code": "^9.0.3",
     "@hapi/hapi": "^21.3.10",
     "@hapi/hoek": "^11.0.4",
-    "@hapi/lab": "^25.3.2",
+    "@hapi/lab": "^26.0.1",
     "sinon": "^20.0.0"
   },
   "peerDependencies": {
-    "@hapi/hapi": ">= 20.3.0"
+    "@hapi/hapi": ">= 21.4.10"
   }
 }
